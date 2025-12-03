@@ -9,41 +9,111 @@
     <link rel="stylesheet" href="~/Sensore.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sensore</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Sensore</h2>
+                <p class="sidebar-sub">Patient Portal</p>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+            <nav>
+                <ul>
+                    <li><a asp-controller="PatientHome" asp-action="Index">🏠 Home</a></li>
+                    <li><a asp-controller="PatientHome" asp-action="PressureDistribution">📊 Pressure Distribution</a></li>
+                    <li><a asp-controller="PatientHome" asp-action="Summary">📈 Summary</a></li>
+                    <li><a asp-controller="PatientHome" asp-action="Reports">📁 Reports</a></li>
+                    <li><a asp-controller="PatientHome" asp-action="Chat">💬 Chat</a></li>
+                </ul>
+            </nav>
+            <div class="logout">
+                <a asp-controller="Loginpage" asp-action="Index" class="logout-btn">🔒 Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-content">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Sensore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<style>
+    .app-container {
+        display: flex;
+        min-height: 100vh;
+        background: #f9fafc;
+    }
+
+    .sidebar {
+        width: 240px;
+        background: #1e293b;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1.5rem 1rem;
+    }
+
+    .sidebar-header {
+        text-align: center;
+    }
+
+        .sidebar-header h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.2rem;
+        }
+
+    .sidebar-sub {
+        font-size: 0.85rem;
+        color: #cbd5e1;
+    }
+
+    .sidebar nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 2rem 0;
+    }
+
+    .sidebar nav li {
+        margin-bottom: 1rem;
+    }
+
+    .sidebar nav a {
+        color: #e2e8f0;
+        text-decoration: none;
+        font-weight: 500;
+        display: block;
+        padding: 0.5rem 0.8rem;
+        border-radius: 0.5rem;
+        transition: background 0.2s;
+    }
+
+        .sidebar nav a:hover {
+            background: #334155;
+        }
+
+    .logout {
+        text-align: center;
+        margin-top: auto;
+    }
+
+    .logout-btn {
+        background: #ef4444;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+    .main-content {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+    }
+</style>

@@ -1,0 +1,230 @@
+﻿@{
+    var latestFrame = Model.LastOrDefault();
+}
+
+
+
+@model IEnumerable<Sensore.Models.PressureMatrix>
+
+<h2>Real-Time Pressure Distribution</h2>
+
+<!-- ===== Metric Cards Section ===== -->
+<div class="metrics-grid">
+    <div class="metric-card purple">
+        <div class="label">Peak Pressure Index</div>
+        <div class="value">@latestFrame?.PeakPressureIndex.ToString("0.00")</div>
+        <div class="subtext">Target: &lt; 1.5</div>
+    </div>
+
+    <div class="metric-card blue">
+        <div class="label">Contact Area</div>
+        <div class="value">@latestFrame?.ContactAreaPercent.ToString("0")%</div>
+        <div class="subtext">Optimal: 60–80%</div>
+    </div>
+
+    <div class="metric-card green">
+        <div class="label">Average Pressure</div>
+        <div class="value">@latestFrame?.AveragePressure.ToString("0") mmHg</div>
+        <div class="subtext">Safe: &lt; 60</div>
+    </div>
+
+    <div class="metric-card orange">
+        <div class="label">Distribution Score</div>
+        <div class="value">@latestFrame?.DistributionScore.ToString("0") / 100</div>
+        <div class="subtext">Lower is better</div>
+    </div>
+</div>
+
+<!-- ===== Color Legend Section ===== -->
+<div class="legend-card">
+    <h4>Real-Time Pressure Color Guide</h4>
+    <div class="legend-items">
+        <span class="legend blue"></span> Blue = Low Pressure
+        <span class="legend yellow"></span> Yellow = Medium Pressure
+        <span class="legend red"></span> Red = High Pressure
+    </div>
+    <p class="legend-note">Chair sensor detecting pressure on buttocks and thighs</p>
+</div>
+
+<!-- ====== Heatmap and Healthy Tips Side by Side ====== -->
+<div class="distribution-grid">
+    <div class="left-panel">
+        <h3>Pressure Distribution Heatmap</h3>
+        <canvas id="heatmapCanvas" width="512" height="512"></canvas>
+    </div>
+
+    <div class="right-panel">
+        <div class="healthy-tips">
+            <h4>✅ Simple Steps to Stay Healthy</h4>
+            <ul>
+                <li><strong>Move every 30 minutes</strong><br />Set a timer on your phone if it helps!</li>
+                <li><strong>Use cushions for red areas</strong><br />Special cushions help spread pressure better.</li>
+                <li><strong>Drink plenty of water</strong><br />Healthy, hydrated skin is stronger.</li>
+                <li><strong>Talk to your care team</strong><br />If red zones persist, reach out for help.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@{
+    // Convert each 2D array to a jagged array (2D -> array of arrays)
+    var jsonFrames = System.Text.Json.JsonSerializer.Serialize(
+        Model.Select(f =>
+            Enumerable.Range(0, f.Matrix.GetLength(0))
+                .Select(i => Enumerable.Range(0, f.Matrix.GetLength(1))
+                    .Select(j => f.Matrix[i, j])
+                    .ToArray())
+                .ToArray()
+        )
+    );
+}
+
+<script>
+    const frames = @Html.Raw(jsonFrames);
+
+    const canvas = document.getElementById('heatmapCanvas');
+    const ctx = canvas.getContext('2d');
+    const size = 32;
+    const cell = canvas.width / size;
+
+    function drawFrame(matrix) {
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                const pressure = matrix[i][j];
+                ctx.fillStyle = `rgb(${pressure}, 0, ${255 - pressure})`;
+                ctx.fillRect(j * cell, i * cell, cell, cell);
+            }
+        }
+    }
+
+    let index = 0;
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawFrame(frames[index]);
+        index = (index + 1) % frames.length;
+        setTimeout(animate, 200); // switch frame every 200ms
+    }
+
+    animate();
+</script>
+<style>
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0 2rem 0;
+    }
+
+    .metric-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.2rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+        .metric-card .label {
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 0.3rem;
+        }
+
+        .metric-card .value {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .metric-card .subtext {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .metric-card.purple .value {
+            color: #8b5cf6;
+        }
+
+        .metric-card.blue .value {
+            color: #3b82f6;
+        }
+
+        .metric-card.green .value {
+            color: #22c55e;
+        }
+
+        .metric-card.orange .value {
+            color: #f97316;
+        }
+
+    .legend-card {
+        background: #eef3ff;
+        padding: 1rem;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .legend-items {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .legend {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+        .legend.blue {
+            background: #3b82f6;
+        }
+
+        .legend.yellow {
+            background: #facc15;
+        }
+
+        .legend.red {
+            background: #ef4444;
+        }
+
+    .legend-note {
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        color: #666;
+    }
+
+    canvas {
+        margin-top: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+</style>
+
+<style>
+    .distribution-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    .healthy-tips {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+        .healthy-tips h4 {
+            color: #065f46;
+            margin-bottom: 1rem;
+        }
+
+        .healthy-tips li {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+</style>
