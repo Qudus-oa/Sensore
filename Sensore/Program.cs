@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Sensore.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -22,6 +29,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Loginpage}/{action=Index}/{id?}");
+   pattern: "{controller=Loginpage}/{action=PatientClinicianLogin}/{id?}");
+
 
 app.Run();

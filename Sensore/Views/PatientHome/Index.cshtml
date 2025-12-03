@@ -1,7 +1,245 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = null;
 }
-@model User
-<h1> patient home Page</h1>
+
+
+@{
+    ViewData["Title"] = "Patient Dashboard";
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f6f8fc;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+        }
+
+            .sidebar h2 {
+                font-size: 1.2rem;
+                color: #333;
+                margin-bottom: 2rem;
+                text-align: center;
+            }
+
+            .sidebar a {
+                text-decoration: none;
+                color: #333;
+                padding: 0.8rem 1rem;
+                margin-bottom: 0.5rem;
+                border-radius: 8px;
+                transition: 0.3s;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+                .sidebar a:hover, .sidebar a.active {
+                    background: #e8f0fe;
+                    color: #007bff;
+                }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+            .header h1 {
+                font-size: 1.8rem;
+                color: #222;
+            }
+
+            .header .welcome {
+                font-size: 1rem;
+                color: #555;
+            }
+
+            .header .notification {
+                position: relative;
+                cursor: pointer;
+            }
+
+                .header .notification span {
+                    position: absolute;
+                    top: -6px;
+                    right: -6px;
+                    background: red;
+                    color: white;
+                    font-size: 0.7rem;
+                    border-radius: 50%;
+                    padding: 2px 6px;
+                }
+
+        /* Welcome card */
+        .welcome-card {
+            background: #007bff;
+            color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-card {
+            background: #ff4d4d;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        /* Health cards */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+            .card h3 {
+                font-size: 1rem;
+                color: #333;
+                margin-bottom: 0.5rem;
+            }
+
+            .card p {
+                font-size: 0.9rem;
+                color: #666;
+            }
+
+        .metric-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .metric-status {
+            color: red;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+            .metric-status.safe {
+                color: green;
+            }
+
+        /* Time buttons */
+        .time-buttons {
+            text-align: right;
+            margin: 1.5rem 0;
+        }
+
+            .time-buttons button {
+                background: white;
+                border: 1px solid #ccc;
+                padding: 0.4rem 1rem;
+                border-radius: 6px;
+                margin-left: 0.5rem;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+                .time-buttons button.active {
+                    background: #007bff;
+                    color: white;
+                    border: none;
+                }
+
+                .time-buttons button:hover {
+                    background: #e8f0fe;
+                }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>Patient Portal</h2>
+        <a href="#" class="active">🏠 Home</a>
+        <a href="#">📊 Pressure Distribution</a>
+        <a href="#">📈 Summary</a>
+        <a href="#">📄 Reports</a>
+        <a href="#">💬 Chat</a>
+        <a href="#">❓ Help & Support</a>
+    </div>
+
+    <div class="content">
+        <div class="header">
+            <div>
+                <h1>Sensore Health Monitor</h1>
+                <div class="welcome">Welcome, John Smith</div>
+            </div>
+            <div class="notification">🔔<span>3</span></div>
+        </div>
+
+        <div class="welcome-card">
+            <p>Welcome back, John Smith 👋</p>
+            <p>Let's check in on how you’re doing today</p>
+            <div class="alert-card">⚠️ You have 2 areas that need attention — see details below</div>
+        </div>
+
+        <h2>Your Health Numbers Explained</h2>
+        <p>Average metrics over the selected time period</p>
+
+        <div class="time-buttons">
+            <button>1 Hour</button>
+            <button class="active">6 Hours</button>
+            <button>24 Hours</button>
+        </div>
+
+        <div class="metrics">
+            <div class="card">
+                <h3>Weight Balance ⚖️</h3>
+                <p class="metric-value">1.78</p>
+                <p>Goal: &lt; 1.5 <span class="metric-status">Needs Attention</span></p>
+                <p>How evenly your weight is spread</p>
+            </div>
+
+            <div class="card">
+                <h3>Body Support Area 🧍‍♂️</h3>
+                <p class="metric-value">85%</p>
+                <p>Sweet Spot: 60–80% <span class="metric-status safe">Good</span></p>
+                <p>How much of you is supported</p>
+            </div>
+
+            <div class="card">
+                <h3>Overall Pressure 💨</h3>
+                <p class="metric-value">49 mmHg</p>
+                <p>Safe Zone: Below 60 <span class="metric-status safe">Safe</span></p>
+                <p>Typical pressure on your body</p>
+            </div>
+
+            <div class="card">
+                <h3>Health Score ❤️</h3>
+                <p class="metric-value">58 / 100</p>
+                <p>Goal: Above 80 <span class="metric-status">Needs Work</span></p>
+                <p>Your overall positioning grade</p>
+            </div>
+        </div>
+    </div>
+</body>
