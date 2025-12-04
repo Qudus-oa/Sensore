@@ -17,5 +17,34 @@ namespace Sensore.Controllers
             var frames = _service.LoadAllFrames();
             return View(frames);
         }
+
+        [HttpGet]
+        public IActionResult GetMetricsData(string range = "6h")
+        {
+            var frames = _service.LoadAllFrames();
+
+            DateTime cutoff = range switch
+            {
+                "1h" => DateTime.Now.AddHours(-1),
+                "24h" => DateTime.Now.AddHours(-24),
+                _ => DateTime.Now.AddHours(-6)
+            };
+
+            var filtered = frames
+                .Where(f => f.Timestamp >= cutoff)
+                .OrderBy(f => f.Timestamp)
+                .ToList();
+
+            var result = new
+            {
+                timestamps = filtered.Select(f => f.Timestamp.ToString("HH:mm")).ToList(),
+                peakPressure = filtered.Select(f => f.PeakPressureIndex).ToList(),
+                avgPressure = filtered.Select(f => f.AveragePressure).ToList(),
+                contactArea = filtered.Select(f => f.ContactAreaPercent).ToList(),
+                distributionScore = filtered.Select(f => f.DistributionScore).ToList()
+            };
+
+            return Json(result);
+        }
     }
 }

@@ -206,10 +206,25 @@
         <h2>Your Health Numbers Explained</h2>
         <p>Average metrics over the selected time period</p>
 
-        <div class="time-buttons">
-            <button>1 Hour</button>
-            <button class="active">6 Hours</button>
-            <button>24 Hours</button>
+     
+
+
+        <div class="chart-section">
+            <h3>Pressure Metrics Trends</h3>
+
+            <div class="time-buttons">
+                <button class="range-btn" data-range="1h">Last Hour</button>
+                <button class="range-btn active" data-range="6h">Last 6 Hours</button>
+                <button class="range-btn" data-range="24h">Last 24 Hours</button>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="ppiChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="contactChart"></canvas>
+            </div>
         </div>
 
         <div class="metrics">
@@ -243,3 +258,126 @@
         </div>
     </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ppiCtx = document.getElementById('ppiChart').getContext('2d');
+    const contactCtx = document.getElementById('contactChart').getContext('2d');
+
+    let ppiChart, contactChart;
+
+    async function loadMetrics(range = "6h") {
+        const response = await fetch(`/PatientHome/GetMetricsData?range=${range}`);
+        const data = await response.json();
+
+        const labels = data.timestamps;
+        const peakPressure = data.peakPressure;
+        const avgPressure = data.avgPressure;
+        const contactArea = data.contactArea;
+        const distributionScore = data.distributionScore;
+
+        if (ppiChart) ppiChart.destroy();
+        if (contactChart) contactChart.destroy();
+
+        // First chart (PPI + Distribution Score)
+        ppiChart = new Chart(ppiCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Peak Pressure Index',
+                        data: peakPressure,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139,92,246,0.2)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        label: 'Distribution Score',
+                        data: distributionScore,
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249,115,22,0.2)',
+                        tension: 0.4,
+                        yAxisID: 'y2'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y1: {
+                        type: 'linear',
+                        position: 'left',
+                        title: { display: true, text: 'PPI' }
+                    },
+                    y2: {
+                        type: 'linear',
+                        position: 'right',
+                        title: { display: true, text: 'Score' },
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+
+        // Second chart (Contact Area + Avg Pressure)
+        contactChart = new Chart(contactCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Contact Area %',
+                        data: contactArea,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59,130,246,0.2)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        label: 'Average Pressure (mmHg)',
+                        data: avgPressure,
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34,197,94,0.2)',
+                        tension: 0.4,
+                        yAxisID: 'y2'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y1: {
+                        type: 'linear',
+                        position: 'left',
+                        title: { display: true, text: 'Contact %' }
+                    },
+                    y2: {
+                        type: 'linear',
+                        position: 'right',
+                        title: { display: true, text: 'mmHg' },
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+    }
+
+    // Time range buttons
+    document.querySelectorAll('.range-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            loadMetrics(btn.dataset.range);
+        });
+    });
+
+    // Initial load
+    loadMetrics("6h");
+</script>

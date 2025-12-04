@@ -51,13 +51,15 @@ namespace Sensore.Services
             double avgPressure = validPixels.Any() ? validPixels.Average() : 0;
             double contactAreaPercent = (validPixels.Count / totalPixels) * 100;
 
-            // Simple "distribution score" – you can tune this formula later
-            double distributionScore = Math.Max(0, 100 - (peakPressure / 2));
+            // Improved distribution score (bounded 0–100)
+            double distributionScore = validPixels.Any()
+                ? Math.Clamp(100 - ((peakPressure - avgPressure) / 2), 0, 100)
+                : 0;
 
             return new PressureMatrix
             {
                 Matrix = matrix,
-                Timestamp = File.GetCreationTime(path),
+                Timestamp = ExtractTimestampFromFilename(path),
                 PeakPressureIndex = peakPressure,
                 AveragePressure = avgPressure,
                 ContactAreaPercent = contactAreaPercent,
