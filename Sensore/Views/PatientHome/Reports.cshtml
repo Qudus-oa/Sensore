@@ -1,0 +1,288 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="report-header">
+    <div>
+        <h2>📘 Pressure Monitoring Report</h2>
+        <p>@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
+        <p><strong>Patient:</strong> John Smith</p>
+    </div>
+    <button class="download-btn" onclick="downloadPDF()">⬇️ Download Report</button>
+</div>
+
+<!-- Comparison Buttons -->
+<div class="comparison-controls">
+    <button class="btn-outline" onclick="loadReport('1h')">Hour-to-Hour</button>
+    <button class="btn-active" onclick="loadReport('24h')">Day-to-Day</button>
+    <button class="btn-outline" onclick="loadReport('7d')">Week-to-Week</button>
+</div>
+
+<!-- Summary Comparison -->
+<div class="summary-grid">
+    <div class="summary-card">
+        <h4>Current Period</h4>
+        <p>Distribution Score: <span id="currentDist">--</span></p>
+        <p>Alert Zones: <span id="currentAlerts">--</span></p>
+        <p>Warning Zones: <span id="currentWarnings">--</span></p>
+    </div>
+    <div class="summary-card">
+        <h4>Yesterday</h4>
+        <p>Distribution Score: <span id="yesterdayDist">--</span></p>
+        <p>Alert Zones: <span id="yesterdayAlerts">--</span></p>
+        <p>Warning Zones: <span id="yesterdayWarnings">--</span></p>
+    </div>
+</div>
+
+<!-- Detailed Comparison -->
+<div class="details-section">
+    <h3>Detailed Metrics Comparison</h3>
+
+    <div class="details-grid">
+        <div class="metric-box">
+            <h5>Peak Pressure Index</h5>
+            <p>Current: <span id="ppiNow">--</span></p>
+            <p>Yesterday: <span id="ppiPrev">--</span></p>
+            <p>Change: <span id="ppiChange">--</span></p>
+            <div id="ppiMsg" class="msg"></div>
+        </div>
+
+        <div class="metric-box">
+            <h5>Contact Area</h5>
+            <p>Current: <span id="contactNow">--%</span></p>
+            <p>Yesterday: <span id="contactPrev">--%</span></p>
+            <p>Change: <span id="contactChange">--%</span></p>
+            <div id="contactMsg" class="msg"></div>
+        </div>
+
+        <div class="metric-box">
+            <h5>Average Pressure</h5>
+            <p>Current: <span id="avgNow">-- mmHg</span></p>
+            <p>Yesterday: <span id="avgPrev">-- mmHg</span></p>
+            <p>Change: <span id="avgChange">--</span></p>
+            <div id="avgMsg" class="msg"></div>
+        </div>
+
+        <div class="metric-box">
+            <h5>Distribution Score</h5>
+            <p>Current: <span id="distNow">--</span></p>
+            <p>Yesterday: <span id="distPrev">--</span></p>
+            <p>Change: <span id="distChange">--</span></p>
+            <div id="distMsg" class="msg"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart -->
+<div class="chart-section">
+    <h3>Visual Comparison</h3>
+    <canvas id="reportChart"></canvas>
+</div>
+
+<!-- Improvements and Recommendations -->
+<div class="recommendation-section">
+    <div class="improvement-box">
+        <h4>✅ Key Improvements</h4>
+        <ul id="improvementsList"></ul>
+    </div>
+    <div class="recommend-box">
+        <h4>ℹ️ Recommended Actions</h4>
+        <ul>
+            <li>Continue regular monitoring and track your progress.</li>
+            <li>Focus on redistributing weight more evenly across body zones.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+    async function loadReport(range = '24h') {
+        const res = await fetch(`/PatientHome/GetMetricsData?range=${range}`);
+        const data = await res.json();
+
+        if (!data.timestamps.length) return;
+
+        const last = data.timestamps.length - 1;
+        const prev = Math.max(0, last - 1);
+
+        // Simple difference calculations
+        const avgDiff = (data.avgPressure[last] - data.avgPressure[prev]).toFixed(2);
+        const ppiDiff = (data.peakPressure[last] - data.peakPressure[prev]).toFixed(2);
+        const contactDiff = (data.contactArea[last] - data.contactArea[prev]).toFixed(2);
+        const distDiff = (data.distributionScore[last] - data.distributionScore[prev]).toFixed(2);
+
+        // Update values
+        document.getElementById("avgNow").innerText = data.avgPressure[last].toFixed(1);
+        document.getElementById("avgPrev").innerText = data.avgPressure[prev].toFixed(1);
+        document.getElementById("avgChange").innerText = (avgDiff > 0 ? "+" : "") + avgDiff;
+        document.getElementById("avgMsg").innerHTML = avgDiff > 0
+            ? "⚠️ Average pressure is rising — reposition more often."
+            : "✅ Average pressure improved — keep up the routine.";
+
+        document.getElementById("ppiNow").innerText = data.peakPressure[last].toFixed(2);
+        document.getElementById("ppiPrev").innerText = data.peakPressure[prev].toFixed(2);
+        document.getElementById("ppiChange").innerText = (ppiDiff > 0 ? "+" : "") + ppiDiff;
+        document.getElementById("ppiMsg").innerHTML = ppiDiff < 0
+            ? "✅ Pressure distribution improved."
+            : "⚠️ Peak pressure increased — review sitting posture.";
+
+        document.getElementById("contactNow").innerText = data.contactArea[last].toFixed(1);
+        document.getElementById("contactPrev").innerText = data.contactArea[prev].toFixed(1);
+        document.getElementById("contactChange").innerText = (contactDiff > 0 ? "+" : "") + contactDiff;
+        document.getElementById("contactMsg").innerHTML = contactDiff < 0
+            ? "⚠️ Less contact area — adjust seating."
+            : "✅ Moving toward optimal range.";
+
+        document.getElementById("distNow").innerText = data.distributionScore[last].toFixed(1);
+        document.getElementById("distPrev").innerText = data.distributionScore[prev].toFixed(1);
+        document.getElementById("distChange").innerText = (distDiff > 0 ? "+" : "") + distDiff;
+        document.getElementById("distMsg").innerHTML = distDiff < 0
+            ? "✅ Improved overall score."
+            : "⚠️ Slight decline — monitor positioning.";
+
+        // Build chart
+        const ctx = document.getElementById('reportChart').getContext('2d');
+        if (window.reportChart) window.reportChart.destroy();
+
+        window.reportChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Peak Pressure', 'Contact Area', 'Avg Pressure', 'Distribution'],
+                datasets: [
+                    { label: 'Current', backgroundColor: '#3b82f6', data: [data.peakPressure[last], data.contactArea[last], data.avgPressure[last], data.distributionScore[last]] },
+                    { label: 'Yesterday', backgroundColor: '#9ca3af', data: [data.peakPressure[prev], data.contactArea[prev], data.avgPressure[prev], data.distributionScore[prev]] }
+                ]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+    }
+
+    function downloadPDF() {
+        const element = document.body;
+        const options = {
+            margin: 0.5,
+            filename: 'Pressure_Report.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(options).from(element).save();
+    }
+
+    loadReport();
+</script>
+
+<style>
+    .report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        color: white;
+        padding: 1.2rem 1.5rem;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .download-btn {
+        background: white;
+        color: #3b82f6;
+        padding: 0.6rem 1rem;
+        border-radius: 0.5rem;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .comparison-controls {
+        display: flex;
+        gap: 0.6rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .btn-outline, .btn-active {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        font-weight: 500;
+    }
+
+    .btn-active {
+        background: #3b82f6;
+        color: white;
+        border: none;
+    }
+
+    .summary-grid {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .summary-card {
+        flex: 1;
+        background: #f8fafc;
+        border-radius: 1rem;
+        padding: 1rem 1.2rem;
+    }
+
+    .details-section {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .metric-box {
+        background: #f9fafb;
+        padding: 1rem;
+        border-radius: 0.8rem;
+        border-left: 4px solid #3b82f6;
+    }
+
+    .msg {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .chart-section {
+        margin-top: 2rem;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .recommendation-section {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .improvement-box, .recommend-box {
+        flex: 1;
+        background: #f0fdf4;
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    .recommend-box {
+        background: #eff6ff;
+    }
+
+    ul {
+        margin: 0;
+        padding-left: 1.2rem;
+    }
+</style>
