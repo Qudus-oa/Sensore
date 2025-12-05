@@ -1,3 +1,5 @@
+
+
 using Microsoft.EntityFrameworkCore;
 using Sensore.Data;
 
@@ -9,6 +11,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession(); // enables session management
 
 var app = builder.Build();
 
@@ -24,7 +27,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession(); //  activate sessions for all requests
 app.UseAuthorization();
 
 app.MapControllerRoute(

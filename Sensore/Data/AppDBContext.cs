@@ -11,9 +11,10 @@ namespace Sensore.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
-        // Add other tables if needed
-        // public DbSet<Patient> Patients { get; set; }
-        // public DbSet<Clinician> Clinicians { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+
+
     }
 }

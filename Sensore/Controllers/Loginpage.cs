@@ -47,5 +47,15 @@ namespace Sensore.Controllers
             ViewBag.ErrorMessage = "Invalid admin credentials. Please try again.";
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear any saved session data or authentication cookies
+            HttpContext.Session.Clear();
+
+            // Redirect to login page
+            return RedirectToAction("PatientClinicianLogin", "Loginpage");
+        }
     }
 }

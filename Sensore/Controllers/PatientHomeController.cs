@@ -1,23 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Sensore.Models;
 using Sensore.Services;
+using Sensore.Data;
 
 namespace Sensore.Controllers
 {
     public class PatientHomeController : Controller
     {
         private readonly PressureDataService _service = new PressureDataService();
+        private readonly AppDBContext _context;  // ✅ single consistent DB context
 
+        // ✅ Constructor with dependency injection
+        public PatientHomeController(AppDBContext context)
+        {
+            _context = context;
+        }
+
+        // ===== Home Page =====
         public IActionResult Index()
         {
-            return View(); // this is to direct user to homepage first 
+            return View();
         }
+
+        // ===== Reports Page =====
+        public IActionResult Reports()
+        {
+            return View();
+        }
+
+
+        // ===== Pressure Distribution Page =====
         public IActionResult PressureDistribution()
         {
             var frames = _service.LoadAllFrames();
             return View(frames);
         }
 
+        // ===== Metrics API for Chart/Graphs =====
         [HttpGet]
         public IActionResult GetMetricsData(string range = "6h")
         {
@@ -45,6 +65,15 @@ namespace Sensore.Controllers
             };
 
             return Json(result);
+        }
+
+        // ===== 🗨️ Chat Page (shows all comments) =====
+        public IActionResult Chat()
+        {
+            var comments = _context.Comments
+                                   .OrderByDescending(c => c.CreatedAt)
+                                   .ToList();
+            return View(comments);
         }
     }
 }

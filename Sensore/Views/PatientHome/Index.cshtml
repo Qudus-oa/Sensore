@@ -1,6 +1,7 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 
 @{
@@ -18,45 +19,7 @@
             overflow: hidden;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background: #fff;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem 1rem;
-        }
-
-            .sidebar h2 {
-                font-size: 1.2rem;
-                color: #333;
-                margin-bottom: 2rem;
-                text-align: center;
-            }
-
-            .sidebar a {
-                text-decoration: none;
-                color: #333;
-                padding: 0.8rem 1rem;
-                margin-bottom: 0.5rem;
-                border-radius: 8px;
-                transition: 0.3s;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-                .sidebar a:hover, .sidebar a.active {
-                    background: #e8f0fe;
-                    color: #007bff;
-                }
-
-        .content {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-        }
+       
 
         /* Header */
         .header {
@@ -178,15 +141,7 @@
 </head>
 
 <body>
-    <div class="sidebar">
-        <h2>Patient Portal</h2>
-        <a href="#" class="active">🏠 Home</a>
-        <a asp-controller="PatientHome" asp-action="PressureDistribution">Pressure Distribution</a>
-        <a href="#">📈 Summary</a>
-        <a href="#">📄 Reports</a>
-        <a href="#">💬 Chat</a>
-        <a href="#">❓ Help & Support</a>
-    </div>
+    
 
     <div class="content">
         <div class="header">
@@ -194,7 +149,7 @@
                 <h1>Sensore Health Monitor</h1>
                 <div class="welcome">Welcome, John Smith</div>
             </div>
-            <div class="notification">🔔<span>3</span></div>
+           
         </div>
 
         <div class="welcome-card">

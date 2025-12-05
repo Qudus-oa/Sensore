@@ -1,10 +1,14 @@
 ﻿@{
-    var latestFrame = Model.LastOrDefault();
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
 
 @model IEnumerable<Sensore.Models.PressureMatrix>
+
+@{
+    var latestFrame = Model.LastOrDefault();
+}
 
 <h2>Real-Time Pressure Distribution</h2>
 
@@ -46,7 +50,7 @@
     <p class="legend-note">Chair sensor detecting pressure on buttocks and thighs</p>
 </div>
 
-<!-- ====== Heatmap and Healthy Tips Side by Side ====== -->
+<!-- ====== Heatmap + Healthy Tips + Comments ====== -->
 <div class="distribution-grid">
     <div class="left-panel">
         <h3>Pressure Distribution Heatmap</h3>
@@ -63,11 +67,33 @@
                 <li><strong>Talk to your care team</strong><br />If red zones persist, reach out for help.</li>
             </ul>
         </div>
+
+        <!-- 🗨️ Comments Section (Simplified Chat Box) -->
+        <div class="comments-section">
+            <h3>Comments & Feedback</h3>
+            <p>Share your thoughts with your clinician below:</p>
+
+            <div class="comments-actions">
+                <button class="btn-outline" id="showCommentsBtn">💬 Show Comments</button>
+                <button class="btn-primary" id="addCommentBtn">➕ Add Comment</button>
+            </div>
+
+            <div id="commentsContainer" style="display:none; margin-top:1rem;">
+                <div class="comment-card">
+                    <p><strong>Clinician:</strong> Pressure on right side slightly high — try repositioning.</p>
+                    <span class="timestamp">🕒 09:15 AM</span>
+                </div>
+                <div class="comment-card">
+                    <p><strong>You:</strong> Adjusted posture, feels better now ✅</p>
+                    <span class="timestamp">🕒 10:00 AM</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @{
-    // Convert each 2D array to a jagged array (2D -> array of arrays)
+    // Convert pressure data to JSON for canvas rendering
     var jsonFrames = System.Text.Json.JsonSerializer.Serialize(
         Model.Select(f =>
             Enumerable.Range(0, f.Matrix.GetLength(0))
@@ -80,8 +106,8 @@
 }
 
 <script>
+    // 🎨 Heatmap rendering
     const frames = @Html.Raw(jsonFrames);
-
     const canvas = document.getElementById('heatmapCanvas');
     const ctx = canvas.getContext('2d');
     const size = 32;
@@ -102,17 +128,70 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawFrame(frames[index]);
         index = (index + 1) % frames.length;
-        setTimeout(animate, 200); // switch frame every 200ms
+        setTimeout(animate, 200);
     }
-
     animate();
 </script>
+
+<!-- 💬 Simple JavaScript Comment System -->
+<script>
+    const showCommentsBtn = document.getElementById("showCommentsBtn");
+    const addCommentBtn = document.getElementById("addCommentBtn");
+    const commentsContainer = document.getElementById("commentsContainer");
+
+    showCommentsBtn.addEventListener("click", () => {
+        commentsContainer.style.display =
+            commentsContainer.style.display === "none" ? "block" : "none";
+    });
+
+    addCommentBtn.addEventListener("click", async () => {
+        const text = prompt("Enter your comment:");
+        if (!text) return;
+
+        // 🕒 capture current timestamp
+        const timestamp = new Date().toISOString();
+
+        // build new comment card immediately for user feedback
+        const card = document.createElement("div");
+        card.className = "comment-card";
+        card.innerHTML = `
+            <p><strong>You:</strong> ${text}</p>
+            <span class="timestamp">🕒 ${new Date().toLocaleString()}</span>
+        `;
+        commentsContainer.appendChild(card);
+        commentsContainer.style.display = "block";
+
+        // send to backend for persistence
+        try {
+            const res = await fetch("/Comments/Add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    FrameTimestamp: timestamp,
+                    Text: text,
+                    Author: "Patient"
+                })
+            });
+
+            if (!res.ok) {
+                console.error(await res.text());
+                alert("⚠️ Couldn't save comment to server, but it shows locally.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("⚠️ Network error saving comment.");
+        }
+    });
+</script>
+
+
+<!-- ===== Styling ===== -->
 <style>
     .metrics-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 1rem;
-        margin: 1.5rem 0 2rem 0;
+        margin: 1.5rem 0 2rem;
     }
 
     .metric-card {
@@ -132,11 +211,6 @@
         .metric-card .value {
             font-size: 1.6rem;
             font-weight: 700;
-        }
-
-        .metric-card .subtext {
-            color: #777;
-            font-size: 0.9rem;
         }
 
         .metric-card.purple .value {
@@ -166,7 +240,6 @@
         display: flex;
         align-items: center;
         gap: 1.5rem;
-        font-size: 0.95rem;
     }
 
     .legend {
@@ -189,20 +262,6 @@
             background: #ef4444;
         }
 
-    .legend-note {
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
-        color: #666;
-    }
-
-    canvas {
-        margin-top: 1rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-</style>
-
-<style>
     .distribution-grid {
         display: grid;
         grid-template-columns: 2fr 1fr;
@@ -215,16 +274,52 @@
         border: 1px solid #a7f3d0;
         border-radius: 1rem;
         padding: 1.5rem;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
-        .healthy-tips h4 {
-            color: #065f46;
-            margin-bottom: 1rem;
-        }
+    .comments-section {
+        background: #fff;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
 
-        .healthy-tips li {
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
+    .comments-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem;
+    }
+
+    .btn-primary, .btn-outline {
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        background: #3b82f6;
+        color: white;
+        border: none;
+    }
+
+    .btn-outline {
+        border: 1px solid #ccc;
+        background: white;
+    }
+
+    .comment-card {
+        background: #f9fafb;
+        border-left: 4px solid #3b82f6;
+        padding: 0.8rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .timestamp {
+        font-size: 0.8rem;
+        color: #777;
+        margin-top: 0.3rem;
+        display: block;
+    }
 </style>
