@@ -1,0 +1,92 @@
+﻿@{
+    Layout = null;
+}
+
+
+
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0b132b;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background-color: #1c2541;
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .icon {
+            font-size: 40px;
+            color: #b388ff;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: none;
+            background-color: #b388ff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #a16eff;
+            }
+
+        a {
+            color: #a0a0ff;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+            a:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <div class="icon">🛡️</div>
+        <h2>Admin Login</h2>
+        <p>Authorized personnel only</p>
+
+        <form>
+            <input type="text" placeholder="Enter your admin ID" />
+            <input type="password" placeholder="Enter your password" />
+            <button type="submit">Login as Admin</button>
+        </form>
+
+        <a href="/Loginpage/PatientClinicianLogin">← Back to Patient/Clinician Login</a>
+    </div>
+</body>

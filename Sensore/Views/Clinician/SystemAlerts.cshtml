@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "System Alerts";
+    Layout = "~/Views/Shared/_ClinicianLayout.cshtml";
+}
+
+<div class="system-alerts p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">System Alerts</h2>
+            <p class="text-muted">Monitor and respond to high-pressure readings</p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" class="form-control" placeholder="Search patients..." style="width: 220px;">
+            <select class="form-select" style="width: 150px;">
+                <option selected>All Risk Levels</option>
+                <option>High Risk</option>
+                <option>Medium</option>
+                <option>Low</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Summary Boxes -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="summary-card red">
+                <h3>2</h3>
+                <p>Critical</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card yellow">
+                <h3>2</h3>
+                <p>Warning</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card blue">
+                <h3>3</h3>
+                <p>New</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card green">
+                <h3>2</h3>
+                <p>Acknowledged</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Cards -->
+    <div class="alert-card">
+        <div class="d-flex justify-content-between">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-exclamation-octagon text-danger"></i>
+                    <strong>John Smith</strong>
+                    <span class="text-muted">ID: P001</span>
+                    <span class="badge bg-danger">HIGH RISK</span>
+                    <span class="badge bg-primary">NEW</span>
+                </div>
+                <p class="mb-1"><strong>Alert Zone:</strong> Zone 5</p>
+                <p class="mb-1"><strong>Pressure Reading:</strong> 95 mmHg</p>
+
+                <div class="recommended-actions">
+                    <p class="fw-semibold mb-1">Recommended Actions:</p>
+                    <ul class="mb-0">
+                        <li>Immediate patient repositioning required</li>
+                        <li>Assess skin condition in affected zone</li>
+                        <li>Consider pressure-relief interventions</li>
+                    </ul>
+                </div>
+
+                <small class="text-muted">
+                    <i class="bi bi-clock"></i> Detected: 2:30 PM | Duration: 15 mins
+                </small>
+            </div>
+
+            <div class="d-flex flex-column align-items-end gap-2">
+                <button class="btn btn-success btn-sm rounded-pill px-3">Acknowledge</button>
+                <button class="btn btn-dark btn-sm rounded-pill px-3">Resolve</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-card">
+        <div class="d-flex justify-content-between">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-exclamation-octagon text-danger"></i>
+                    <strong>Emily Davis</strong>
+                    <span class="text-muted">ID: P003</span>
+                    <span class="badge bg-danger">HIGH RISK</span>
+                    <span class="badge bg-primary">NEW</span>
+                </div>
+                <p class="mb-1"><strong>Alert Zone:</strong> Zone 6</p>
+                <p class="mb-1"><strong>Pressure Reading:</strong> 88 mmHg</p>
+
+                <div class="recommended-actions">
+                    <p class="fw-semibold mb-1">Recommended Actions:</p>
+                    <ul class="mb-0">
+                        <li>Review patient positioning</li>
+                        <li>Reassess risk and notify nursing staff</li>
+                    </ul>
+                </div>
+
+                <small class="text-muted">
+                    <i class="bi bi-clock"></i> Detected: 2:15 PM | Duration: 30 mins
+                </small>
+            </div>
+
+            <div class="d-flex flex-column align-items-end gap-2">
+                <button class="btn btn-success btn-sm rounded-pill px-3">Acknowledge</button>
+                <button class="btn btn-dark btn-sm rounded-pill px-3">Resolve</button>
+            </div>
+        </div>
+    </div>
+</div>

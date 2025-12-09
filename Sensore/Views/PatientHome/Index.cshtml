@@ -1,7 +1,338 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model User
-<h1> patient home Page</h1>
+
+
+
+@{
+    ViewData["Title"] = "Patient Dashboard";
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f6f8fc;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+       
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+            .header h1 {
+                font-size: 1.8rem;
+                color: #222;
+            }
+
+            .header .welcome {
+                font-size: 1rem;
+                color: #555;
+            }
+
+            .header .notification {
+                position: relative;
+                cursor: pointer;
+            }
+
+                .header .notification span {
+                    position: absolute;
+                    top: -6px;
+                    right: -6px;
+                    background: red;
+                    color: white;
+                    font-size: 0.7rem;
+                    border-radius: 50%;
+                    padding: 2px 6px;
+                }
+
+        /* Welcome card */
+        .welcome-card {
+            background: #007bff;
+            color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-card {
+            background: #ff4d4d;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        /* Health cards */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+            .card h3 {
+                font-size: 1rem;
+                color: #333;
+                margin-bottom: 0.5rem;
+            }
+
+            .card p {
+                font-size: 0.9rem;
+                color: #666;
+            }
+
+        .metric-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .metric-status {
+            color: red;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+            .metric-status.safe {
+                color: green;
+            }
+
+        /* Time buttons */
+        .time-buttons {
+            text-align: right;
+            margin: 1.5rem 0;
+        }
+
+            .time-buttons button {
+                background: white;
+                border: 1px solid #ccc;
+                padding: 0.4rem 1rem;
+                border-radius: 6px;
+                margin-left: 0.5rem;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+                .time-buttons button.active {
+                    background: #007bff;
+                    color: white;
+                    border: none;
+                }
+
+                .time-buttons button:hover {
+                    background: #e8f0fe;
+                }
+    </style>
+</head>
+
+<body>
+    
+
+    <div class="content">
+        <div class="header">
+            <div>
+                <h1>Sensore Health Monitor</h1>
+                <div class="welcome">Welcome, John Smith</div>
+            </div>
+           
+        </div>
+
+        <div class="welcome-card">
+            <p>Welcome back, John Smith 👋</p>
+            <p>Let's check in on how you’re doing today</p>
+            <div class="alert-card">⚠️ You have 2 areas that need attention — see details below</div>
+        </div>
+
+        <h2>Your Health Numbers Explained</h2>
+        <p>Average metrics over the selected time period</p>
+
+     
+
+
+        <div class="chart-section">
+            <h3>Pressure Metrics Trends</h3>
+
+            <div class="time-buttons">
+                <button class="range-btn" data-range="1h">Last Hour</button>
+                <button class="range-btn active" data-range="6h">Last 6 Hours</button>
+                <button class="range-btn" data-range="24h">Last 24 Hours</button>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="ppiChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="contactChart"></canvas>
+            </div>
+        </div>
+
+        <div class="metrics">
+            <div class="card">
+                <h3>Weight Balance ⚖️</h3>
+                <p class="metric-value">1.78</p>
+                <p>Goal: &lt; 1.5 <span class="metric-status">Needs Attention</span></p>
+                <p>How evenly your weight is spread</p>
+            </div>
+
+            <div class="card">
+                <h3>Body Support Area 🧍‍♂️</h3>
+                <p class="metric-value">85%</p>
+                <p>Sweet Spot: 60–80% <span class="metric-status safe">Good</span></p>
+                <p>How much of you is supported</p>
+            </div>
+
+            <div class="card">
+                <h3>Overall Pressure 💨</h3>
+                <p class="metric-value">49 mmHg</p>
+                <p>Safe Zone: Below 60 <span class="metric-status safe">Safe</span></p>
+                <p>Typical pressure on your body</p>
+            </div>
+
+            <div class="card">
+                <h3>Health Score ❤️</h3>
+                <p class="metric-value">58 / 100</p>
+                <p>Goal: Above 80 <span class="metric-status">Needs Work</span></p>
+                <p>Your overall positioning grade</p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ppiCtx = document.getElementById('ppiChart').getContext('2d');
+    const contactCtx = document.getElementById('contactChart').getContext('2d');
+
+    let ppiChart, contactChart;
+
+    async function loadMetrics(range = "6h") {
+        const response = await fetch(`/PatientHome/GetMetricsData?range=${range}`);
+        const data = await response.json();
+
+        const labels = data.timestamps;
+        const peakPressure = data.peakPressure;
+        const avgPressure = data.avgPressure;
+        const contactArea = data.contactArea;
+        const distributionScore = data.distributionScore;
+
+        if (ppiChart) ppiChart.destroy();
+        if (contactChart) contactChart.destroy();
+
+        // First chart (PPI + Distribution Score)
+        ppiChart = new Chart(ppiCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Peak Pressure Index',
+                        data: peakPressure,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139,92,246,0.2)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        label: 'Distribution Score',
+                        data: distributionScore,
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249,115,22,0.2)',
+                        tension: 0.4,
+                        yAxisID: 'y2'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y1: {
+                        type: 'linear',
+                        position: 'left',
+                        title: { display: true, text: 'PPI' }
+                    },
+                    y2: {
+                        type: 'linear',
+                        position: 'right',
+                        title: { display: true, text: 'Score' },
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+
+        // Second chart (Contact Area + Avg Pressure)
+        contactChart = new Chart(contactCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Contact Area %',
+                        data: contactArea,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59,130,246,0.2)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        label: 'Average Pressure (mmHg)',
+                        data: avgPressure,
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34,197,94,0.2)',
+                        tension: 0.4,
+                        yAxisID: 'y2'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y1: {
+                        type: 'linear',
+                        position: 'left',
+                        title: { display: true, text: 'Contact %' }
+                    },
+                    y2: {
+                        type: 'linear',
+                        position: 'right',
+                        title: { display: true, text: 'mmHg' },
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+    }
+
+    // Time range buttons
+    document.querySelectorAll('.range-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            loadMetrics(btn.dataset.range);
+        });
+    });
+
+    // Initial load
+    loadMetrics("6h");
+</script>
