@@ -18,5 +18,9 @@ namespace Sensore.Models
         public string Text { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Fields for clinician reply
+        public string? ClinicianReply { get; set; }
+        public DateTime? ReplyAt { get; set; }
     }
 }

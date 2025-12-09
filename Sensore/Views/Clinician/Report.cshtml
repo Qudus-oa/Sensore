@@ -1,0 +1,98 @@
+﻿@model Sensore.Models.ClinicalReportViewModel
+@{
+    ViewBag.Title = "Clinical Assessment Report";
+    Layout = "~/Views/Shared/_ClinicianLayout.cshtml";
+}
+
+<div class="p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">Clinical Assessment Report</h4>
+        </div>
+        <div>
+            <button class="btn btn-success me-2"><i class="bi bi-file-earmark-pdf"></i> Download PDF</button>
+            <button class="btn btn-secondary"><i class="bi bi-printer"></i> Print</button>
+        </div>
+    </div>
+
+    <!-- Report Header -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h5 class="fw-bold mb-1">Pressure Monitoring Assessment Report</h5>
+                <p class="text-muted mb-0">Comprehensive analysis and clinical recommendations</p>
+            </div>
+            <div class="text-end small text-muted">
+                <p>Report Date: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+                <p>Period Analyzed: @Model.ReportPeriod</p>
+                <p>Clinician: Dr. Sarah Johnson</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Info -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-person-badge"></i> Patient Information</h6>
+        <div class="row small">
+            <div class="col-md-2"><strong>Patient Name</strong><br />@Model.PatientName</div>
+            <div class="col-md-2"><strong>Patient ID</strong><br />@Model.PatientId</div>
+            <div class="col-md-2"><strong>Age</strong><br />@Model.Age years</div>
+            <div class="col-md-2"><strong>Room</strong><br />@Model.Room</div>
+            <div class="col-md-2"><strong>Active Alerts</strong><br />@Model.ActiveAlerts</div>
+            <div class="col-md-2"><strong>Last Reading</strong><br />@Model.LastReading</div>
+        </div>
+    </div>
+
+    <!-- Executive Summary -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background:#eff6ff;">
+        <h6 class="fw-semibold mb-2"><i class="bi bi-file-text"></i> Executive Summary</h6>
+        <p class="small text-muted mb-0">
+            Patient @Model.PatientName (ID: @Model.PatientId) has been monitored over the past @Model.ReportPeriod
+            using the Sensore pressure-mapping system. The analysis reveals a high-risk profile with peak pressure readings
+            of <strong>@Model.PeakPressure mmHg</strong> and a PPI of <strong>@Model.PPI</strong>. The patient's distribution
+            score indicates pressure distribution issues requiring intervention. There are
+            <strong>@Model.ActiveAlerts active alert(s)</strong> requiring attention.
+        </p>
+    </div>
+
+    <!-- Key Metrics Overview -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-bar-chart"></i> Key Metrics Overview</h6>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="metric-box border rounded-4 p-3">
+                    <h6 class="fw-bold text-danger">Peak Pressure</h6>
+                    <h4>@Model.PeakPressure <small>mmHg</small></h4>
+                    <p class="small text-danger">Exceeds Threshold - Action Required</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-box border rounded-4 p-3">
+                    <h6 class="fw-bold text-primary">Contact Area %</h6>
+                    <h4>@Model.ContactArea%</h4>
+                    <p class="small text-success">Optimal Positioning</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-box border rounded-4 p-3">
+                    <h6 class="fw-bold text-warning">Peak Pressure Index</h6>
+                    <h4>@Model.PPI</h4>
+                    <p class="small text-danger">Elevated – Monitor Closely</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-box border rounded-4 p-3">
+                    <h6 class="fw-bold text-success">Posture Changes</h6>
+                    <h4>@Model.PostureChanges</h4>
+                    <p class="small text-success">Adequate Movement</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelector('.btn-success').addEventListener('click', () => window.print());
+    </script>
+}

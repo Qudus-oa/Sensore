@@ -15,6 +15,8 @@ builder.Services.AddSession(); // enables session management
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -29,6 +31,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession(); //  activate sessions for all requests
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

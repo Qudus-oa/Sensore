@@ -1,0 +1,275 @@
+﻿@{
+    ViewBag.Title = "Patient Analytics";
+    Layout = "~/Views/Shared/_ClinicianLayout.cshtml";
+}
+
+<div class="analytics p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Patient Analytics</h2>
+            <p class="text-muted">Evidence-based decision support and trend analysis</p>
+        </div>
+        <div class="notification-bell position-relative">
+            <i class="bi bi-bell fs-4"></i>
+            <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle">3</span>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 p-4">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Select Patient</label>
+                <select class="form-select">
+                    <option>John Smith (P001)</option>
+                    <option>Emily Davis (P003)</option>
+                    <option>Michael Brown (P002)</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label fw-semibold">Time Range</label><br />
+                <div class="btn-group">
+                    <button class="btn btn-success active">24 Hours</button>
+                    <button class="btn btn-outline-secondary">7 Days</button>
+                    <button class="btn btn-outline-secondary">30 Days</button>
+                </div>
+            </div>
+            <div class="col-md-3 text-end">
+                <div class="alert-info-card p-3 rounded-4 text-start bg-light border">
+                    <h6 class="fw-semibold text-success mb-1">Patient: John Smith</h6>
+                    <p class="mb-1 text-muted small">Room 201A • Age 68</p>
+                    <span class="badge bg-danger">HIGH RISK</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="fw-semibold">Peak Pressure</h6>
+                    <span class="badge bg-danger">Critical</span>
+                </div>
+                <h3 class="fw-bold text-danger mt-2">95 <small class="text-muted fs-6">mmHg</small></h3>
+                <p class="text-muted small mb-0">Highest recorded value</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="fw-semibold">Contact Area %</h6>
+                    <span class="badge bg-primary">Active</span>
+                </div>
+                <h3 class="fw-bold text-primary mt-2">30.5 <small class="text-muted fs-6">%</small></h3>
+                <p class="text-muted small mb-0">Average body contact</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="fw-semibold">Peak Pressure Index</h6>
+                    <span class="badge bg-warning text-dark">High</span>
+                </div>
+                <h3 class="fw-bold text-warning mt-2">1.82</h3>
+                <p class="text-muted small mb-0">PPI ratio score</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="fw-semibold">Posture Changes</h6>
+                    <span class="badge bg-purple text-light">Tracked</span>
+                </div>
+                <h3 class="fw-bold text-purple mt-2">38</h3>
+                <p class="text-muted small mb-0">In selected period</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Peak Pressure Trend -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h5 class="fw-semibold mb-3">Peak Pressure Trend</h5>
+        <p class="text-muted small">Monitor how peak pressure changes over time to identify patterns</p>
+        <canvas id="pressureChart" height="100"></canvas>
+
+        <div class="alert alert-danger mt-3 rounded-4">
+            <strong>Clinical Insight:</strong> Peak pressure values consistently above 80 mmHg indicate high risk.
+            Current average: <span class="fw-bold text-danger">95 mmHg</span>.
+        </div>
+    </div>
+
+    <!-- Contact Area Trend -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h5 class="fw-semibold mb-2">Contact Area Percentage Trend</h5>
+        <p class="text-muted small">Track body surface contact with the sensor to assess positioning</p>
+        <canvas id="contactChart" height="100"></canvas>
+    </div>
+
+    <!-- Zone Pressure Analysis -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h5 class="fw-semibold mb-2">Zone Pressure Analysis</h5>
+        <p class="text-muted small">Compare average and maximum pressure across different body zones</p>
+        <canvas id="zoneChart" height="100"></canvas>
+        <div class="alert alert-warning mt-3 rounded-4">
+            <strong>Clinical Insight:</strong> Zones 5 and 6 show consistently high pressure. Recommend pressure relief interventions for these areas.
+        </div>
+    </div>
+
+    <!-- Posture Analysis -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h5 class="fw-semibold mb-2">Posture Frequency Distribution</h5>
+                <p class="text-muted small">Analyze sitting posture patterns for evidence-based interventions</p>
+                <canvas id="postureChart" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h5 class="fw-semibold mb-2">Posture Summary</h5>
+                <p class="text-muted small">Detailed breakdown of posture distribution</p>
+
+                <ul class="list-group border-0 small">
+                    <li class="list-group-item border-0 d-flex justify-content-between"><span class="text-success">● Upright Sitting</span> <strong>45%</strong></li>
+                    <li class="list-group-item border-0 d-flex justify-content-between"><span class="text-warning">● Leaning Left</span> <strong>20%</strong></li>
+                    <li class="list-group-item border-0 d-flex justify-content-between"><span style="color:#f59e0b;">● Leaning Right</span> <strong>18%</strong></li>
+                    <li class="list-group-item border-0 d-flex justify-content-between"><span class="text-danger">● Slouched</span> <strong>12%</strong></li>
+                    <li class="list-group-item border-0 d-flex justify-content-between"><span class="text-primary">● Reclined</span> <strong>5%</strong></li>
+                </ul>
+
+                <div class="alert alert-success mt-3 rounded-4 small">
+                    <strong>Clinical Insight:</strong> 45% upright sitting is good. However, 12% slouched posture warrants intervention to prevent pressure injuries.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evidence-Based Recommendations -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h5 class="fw-semibold mb-2">Evidence-Based Recommendations</h5>
+        <p class="text-muted small">Clinical decision support based on analyzed metrics</p>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <div class="p-3 rounded-4 h-100" style="background:#fee2e2;">
+                    <h6 class="fw-semibold text-danger mb-2"><i class="bi bi-exclamation-circle"></i> High Priority</h6>
+                    <ul class="text-danger small mb-0">
+                        <li>Peak pressure exceeds safe threshold (>80 mmHg)</li>
+                        <li>Immediate repositioning required for Zone 5</li>
+                        <li>Assess skin integrity in high-pressure zones</li>
+                        <li>Consider pressure-relief cushion upgrade</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 rounded-4 h-100" style="background:#fef9c3;">
+                    <h6 class="fw-semibold text-warning mb-2"><i class="bi bi-exclamation-triangle"></i> Moderate Priority</h6>
+                    <ul class="text-warning small mb-0">
+                        <li>Increase frequency of posture changes</li>
+                        <li>Monitor contact-area percentage trends</li>
+                        <li>Schedule follow-up within 24 hours</li>
+                        <li>Review seating equipment effectiveness</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 rounded-4 h-100" style="background:#dbeafe;">
+                    <h6 class="fw-semibold text-primary mb-2"><i class="bi bi-graph-up"></i> Posture Optimization</h6>
+                    <ul class="text-primary small mb-0">
+                        <li>Reduce slouched posture from 12% to under 5%</li>
+                        <li>Encourage more frequent upright positioning</li>
+                        <li>Implement posture reminder schedule</li>
+                        <li>Consider ergonomic seating assessment</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 rounded-4 h-100" style="background:#dcfce7;">
+                    <h6 class="fw-semibold text-success mb-2"><i class="bi bi-check-circle"></i> Monitoring Plan</h6>
+                    <ul class="text-success small mb-0">
+                        <li>Continue real-time pressure monitoring</li>
+                        <li>Document intervention outcomes</li>
+                        <li>Review analytics weekly for trend analysis</li>
+                        <li>Adjust care plan based on insights</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generate Report -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-5 d-flex flex-row justify-content-between align-items-center"
+         style="background:#dcfce7;">
+        <div>
+            <h6 class="fw-semibold text-success mb-1"><i class="bi bi-file-earmark-text"></i> Clinical Assessment Report</h6>
+            <p class="text-muted small mb-0">Generate a comprehensive report with key trends, insights, and recommendations</p>
+        </div>
+        <a href="@Url.Action("Report", "Clinician")" class="btn btn-success rounded-pill px-4 py-2">
+            <i class="bi bi-printer"></i> Generate Report
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Peak Pressure Trend
+        new Chart(document.getElementById('pressureChart'), {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                datasets: [{
+                    data: [85, 88, 95, 92, 90, 94],
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239,68,68,0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { plugins: { legend: { display: false } } }
+        });
+
+        // Contact Area Trend
+        new Chart(document.getElementById('contactChart'), {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                datasets: [{
+                    data: [34, 32, 36, 33, 29, 31],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59,130,246,0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { plugins: { legend: { display: false } } }
+        });
+
+        // Zone Pressure Chart
+        new Chart(document.getElementById('zoneChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8'],
+                datasets: [
+                    { label: 'Average Pressure', data: [25, 50, 60, 75, 95, 90, 40, 30], backgroundColor: '#22c55e' },
+                    { label: 'Maximum Pressure', data: [30, 65, 70, 85, 100, 95, 55, 40], backgroundColor: '#ef4444' }
+                ]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        // Posture Distribution Pie
+        new Chart(document.getElementById('postureChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Upright Sitting', 'Leaning Left', 'Leaning Right', 'Slouched', 'Reclined'],
+                datasets: [{
+                    data: [45, 20, 18, 12, 5],
+                    backgroundColor: ['#22c55e', '#facc15', '#f59e0b', '#ef4444', '#3b82f6']
+                }]
+            }
+        });
+    </script>
+}
