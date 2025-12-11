@@ -8,7 +8,7 @@ namespace Sensore.Models
         public int CriticalAlertCount { get; set; }
         public int HighRiskPatientsCount { get; set; }
         public int NewAlertsCount { get; set; }
-
+        
         public List<AlertViewModel> RecentCriticalAlerts { get; set; } = new();
         public List<PatientRiskViewModel> HighRiskPatients { get; set; } = new();
     }

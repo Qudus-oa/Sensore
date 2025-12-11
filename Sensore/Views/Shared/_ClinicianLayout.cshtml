@@ -12,6 +12,72 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+
+    <!--  Sidebar + Layout Styling -->
+    <style>
+        /* === Sidebar === */
+        .sidebar {
+            background-color: #14532d; /* Deep green sidebar */
+            color: white;
+            width: 240px;
+            min-height: 100vh;
+            padding: 1.5rem 1rem;
+        }
+
+        .sidebar-header .profile-pic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #10b981; /* Accent green circle */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .sidebar .nav-link {
+            color: #d1fae5; /* Light green text */
+            display: block;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: 0.25s;
+        }
+
+            .sidebar .nav-link.active,
+            .sidebar .nav-link:hover {
+                background-color: #10b981; /* Bright green highlight */
+                color: white;
+            }
+
+            .sidebar .nav-link i {
+                margin-right: 8px;
+            }
+
+        .sidebar .badge {
+            background-color: #dc2626;
+            font-size: 0.7rem;
+            margin-left: 6px;
+        }
+
+        .logout-section a {
+            background-color: #dc2626;
+            border: none;
+        }
+
+            .logout-section a:hover {
+                background-color: #b91c1c;
+            }
+
+        /* === Main Content === */
+        .content-area {
+            background-color: #f9fafb;
+            min-height: 100vh;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,12 +85,16 @@
         <!-- Sidebar -->
         <aside class="sidebar d-flex flex-column justify-content-between">
             <div>
+                <!-- Clinician Info -->
                 <div class="sidebar-header text-center mb-4">
-                    <div class="profile-pic mb-3 mx-auto"></div>
+                    <div class="profile-pic mb-3 mx-auto">
+                        @clinicianName.Substring(0, 1).ToUpper()
+                    </div>
                     <p class="fw-semibold mb-0">Clinician</p>
                     <h6 class="text-white mb-4">@clinicianName</h6>
                 </div>
 
+                <!-- Navigation -->
                 <nav class="sidebar-nav">
                     <a class="nav-link @(ViewBag.Title == "Clinical Dashboard" ? "active" : "")"
                        href="@Url.Action("Dashboard", "Clinician")">
@@ -42,23 +112,21 @@
                         <i class="bi bi-people-fill"></i> Patients
                     </a>
 
-
                     <a class="nav-link @(ViewBag.Title == "Patient Analytics" ? "active" : "")"
                        href="@Url.Action("Analytics", "Clinician")">
                         <i class="bi bi-graph-up"></i> Analytics
                     </a>
-+
 
                     <a class="nav-link @(ViewBag.Title == "Communication" ? "active" : "")"
                        href="@Url.Action("Communication", "Clinician")">
                         <i class="bi bi-chat-dots"></i> Communication
                     </a>
-
                 </nav>
             </div>
 
-            <div class="logout-section text-center">
-                <a href="@Url.Action("PatientClinicianLogin", "Loginpage")"
+            <!-- Logout -->
+            <div class="logout-section text-center mt-auto">
+                <a href="@Url.Action("Logout", "Loginpage")"
                    class="btn btn-danger w-100 rounded-pill">
                     <i class="bi bi-box-arrow-right"></i> Logout
                 </a>
@@ -71,6 +139,7 @@
         </main>
     </div>
 
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @RenderSection("Scripts", required: false)

@@ -3,117 +3,179 @@
     Layout = "~/Views/Shared/_ClinicianLayout.cshtml";
 }
 
-<div class="system-alerts p-4">
+<div class="alerts p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">System Alerts</h2>
-            <p class="text-muted">Monitor and respond to high-pressure readings</p>
-        </div>
-
-        <div class="d-flex align-items-center gap-2">
-            <input type="text" class="form-control" placeholder="Search patients..." style="width: 220px;">
-            <select class="form-select" style="width: 150px;">
-                <option selected>All Risk Levels</option>
-                <option>High Risk</option>
-                <option>Medium</option>
-                <option>Low</option>
-            </select>
-        </div>
+        <h2 class="fw-bold mb-0">System Alerts</h2>
+        <p class="text-muted">Real-time alerts for patient pressure and posture monitoring</p>
     </div>
 
-    <!-- Summary Boxes -->
+    <!-- High-level stats (Critical, Warning, etc.) -->
     <div class="row g-3 mb-4">
         <div class="col-md-3">
-            <div class="summary-card red">
-                <h3>2</h3>
-                <p>Critical</p>
+            <div class="card bg-danger text-white text-center rounded-4 shadow-sm p-3">
+                <h6 class="fw-semibold mb-1">Critical</h6>
+                <h4 class="fw-bold">2</h4>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="summary-card yellow">
-                <h3>2</h3>
-                <p>Warning</p>
+            <div class="card bg-warning text-dark text-center rounded-4 shadow-sm p-3">
+                <h6 class="fw-semibold mb-1">Warning</h6>
+                <h4 class="fw-bold">2</h4>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="summary-card blue">
-                <h3>3</h3>
-                <p>New</p>
+            <div class="card bg-primary text-white text-center rounded-4 shadow-sm p-3">
+                <h6 class="fw-semibold mb-1">New</h6>
+                <h4 class="fw-bold">5</h4>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="summary-card green">
-                <h3>2</h3>
-                <p>Acknowledged</p>
+            <div class="card bg-success text-white text-center rounded-4 shadow-sm p-3">
+                <h6 class="fw-semibold mb-1">Acknowledged</h6>
+                <h4 class="fw-bold">1</h4>
             </div>
         </div>
     </div>
 
-    <!-- Alert Cards -->
-    <div class="alert-card">
-        <div class="d-flex justify-content-between">
-            <div>
-                <div class="d-flex align-items-center gap-2 mb-1">
-                    <i class="bi bi-exclamation-octagon text-danger"></i>
-                    <strong>John Smith</strong>
-                    <span class="text-muted">ID: P001</span>
-                    <span class="badge bg-danger">HIGH RISK</span>
-                    <span class="badge bg-primary">NEW</span>
+    <!-- Alerts list -->
+    <div id="alertList">
+
+        <!-- 🔴 HIGH RISK: John Smith -->
+        <div class="alert-card bg-danger-subtle border border-danger rounded-4 p-4 mb-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="fw-bold text-danger mb-1">
+                        <i class="bi bi-exclamation-triangle"></i> John Smith <span class="text-muted">ID: P001</span>
+                        <span class="badge bg-danger ms-2">HIGH RISK</span>
+                        <span class="badge bg-primary ms-1">NEW</span>
+                    </h6>
+                    <p class="mb-1"><strong>Alert Zone:</strong> Zone 5</p>
+                    <p class="mb-2"><strong>Pressure Reading:</strong> 95 mmHg</p>
+                    <div class="bg-white p-2 rounded-3 border small">
+                        <strong>Recommended Actions:</strong>
+                        <ul class="mb-0">
+                            <li>Immediate patient repositioning required</li>
+                            <li>Assess skin condition in affected zone</li>
+                            <li>Consider pressure-relief interventions</li>
+                        </ul>
+                    </div>
+                    <small class="text-muted d-block mt-2"><i class="bi bi-clock"></i> Detected: 2:30 PM | Duration: 15 mins</small>
                 </div>
-                <p class="mb-1"><strong>Alert Zone:</strong> Zone 5</p>
-                <p class="mb-1"><strong>Pressure Reading:</strong> 95 mmHg</p>
-
-                <div class="recommended-actions">
-                    <p class="fw-semibold mb-1">Recommended Actions:</p>
-                    <ul class="mb-0">
-                        <li>Immediate patient repositioning required</li>
-                        <li>Assess skin condition in affected zone</li>
-                        <li>Consider pressure-relief interventions</li>
-                    </ul>
+                <div class="text-end">
+                    <button class="btn btn-success btn-sm rounded-pill mb-1">Acknowledge</button>
+                    <button class="btn btn-dark btn-sm rounded-pill">Resolve</button>
                 </div>
-
-                <small class="text-muted">
-                    <i class="bi bi-clock"></i> Detected: 2:30 PM | Duration: 15 mins
-                </small>
-            </div>
-
-            <div class="d-flex flex-column align-items-end gap-2">
-                <button class="btn btn-success btn-sm rounded-pill px-3">Acknowledge</button>
-                <button class="btn btn-dark btn-sm rounded-pill px-3">Resolve</button>
             </div>
         </div>
-    </div>
 
-    <div class="alert-card">
-        <div class="d-flex justify-content-between">
-            <div>
-                <div class="d-flex align-items-center gap-2 mb-1">
-                    <i class="bi bi-exclamation-octagon text-danger"></i>
-                    <strong>Emily Davis</strong>
-                    <span class="text-muted">ID: P003</span>
-                    <span class="badge bg-danger">HIGH RISK</span>
-                    <span class="badge bg-primary">NEW</span>
+        <!-- 🔴 HIGH RISK: Emily Davis -->
+        <div class="alert-card bg-danger-subtle border border-danger rounded-4 p-4 mb-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="fw-bold text-danger mb-1">
+                        <i class="bi bi-exclamation-triangle"></i> Emily Davis <span class="text-muted">ID: P003</span>
+                        <span class="badge bg-danger ms-2">HIGH RISK</span>
+                        <span class="badge bg-primary ms-1">NEW</span>
+                    </h6>
+                    <p class="mb-1"><strong>Alert Zone:</strong> Zone 6</p>
+                    <p class="mb-2"><strong>Pressure Reading:</strong> 88 mmHg</p>
+                    <div class="bg-white p-2 rounded-3 border small">
+                        <strong>Recommended Actions:</strong>
+                        <ul class="mb-0">
+                            <li>Review patient positioning</li>
+                            <li>Reassess risk and notify nursing staff</li>
+                        </ul>
+                    </div>
+                    <small class="text-muted d-block mt-2"><i class="bi bi-clock"></i> Detected: 2:15 PM | Duration: 30 mins</small>
                 </div>
-                <p class="mb-1"><strong>Alert Zone:</strong> Zone 6</p>
-                <p class="mb-1"><strong>Pressure Reading:</strong> 88 mmHg</p>
-
-                <div class="recommended-actions">
-                    <p class="fw-semibold mb-1">Recommended Actions:</p>
-                    <ul class="mb-0">
-                        <li>Review patient positioning</li>
-                        <li>Reassess risk and notify nursing staff</li>
-                    </ul>
+                <div class="text-end">
+                    <button class="btn btn-success btn-sm rounded-pill mb-1">Acknowledge</button>
+                    <button class="btn btn-dark btn-sm rounded-pill">Resolve</button>
                 </div>
-
-                <small class="text-muted">
-                    <i class="bi bi-clock"></i> Detected: 2:15 PM | Duration: 30 mins
-                </small>
-            </div>
-
-            <div class="d-flex flex-column align-items-end gap-2">
-                <button class="btn btn-success btn-sm rounded-pill px-3">Acknowledge</button>
-                <button class="btn btn-dark btn-sm rounded-pill px-3">Resolve</button>
             </div>
         </div>
+
+        <!-- 🟡 MEDIUM RISK: Michael Brown -->
+        <div class="alert-card bg-warning-subtle border border-warning rounded-4 p-4 mb-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="fw-bold text-warning mb-1">
+                        <i class="bi bi-exclamation-circle"></i> Michael Brown <span class="text-muted">ID: P002</span>
+                        <span class="badge bg-warning text-dark ms-2">MEDIUM RISK</span>
+                    </h6>
+                    <p class="mb-1"><strong>Alert Zone:</strong> Zone 4</p>
+                    <p class="mb-2"><strong>Pressure Reading:</strong> 75 mmHg</p>
+                    <div class="bg-white p-2 rounded-3 border small">
+                        <strong>Recommended Actions:</strong>
+                        <ul class="mb-0">
+                            <li>Schedule position change within 30 minutes</li>
+                            <li>Monitor pressure trends closely</li>
+                            <li>Document intervention in patient record</li>
+                        </ul>
+                    </div>
+                    <small class="text-muted d-block mt-2"><i class="bi bi-clock"></i> Detected: 1:45 PM | Duration: 1 hour</small>
+                </div>
+                <div class="text-end">
+                    <button class="btn btn-outline-success btn-sm rounded-pill mb-1">Acknowledge</button>
+                    <button class="btn btn-dark btn-sm rounded-pill">Resolve</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🟡 MEDIUM RISK: Sarah Wilson -->
+        <div class="alert-card bg-warning-subtle border border-warning rounded-4 p-4 mb-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="fw-bold text-warning mb-1">
+                        <i class="bi bi-exclamation-circle"></i> Sarah Wilson <span class="text-muted">ID: P005</span>
+                        <span class="badge bg-warning text-dark ms-2">MEDIUM RISK</span>
+                        <span class="badge bg-primary ms-1">NEW</span>
+                    </h6>
+                    <p class="mb-1"><strong>Alert Zone:</strong> Zone 3</p>
+                    <p class="mb-2"><strong>Pressure Reading:</strong> 68 mmHg</p>
+                    <div class="bg-white p-2 rounded-3 border small">
+                        <strong>Recommended Actions:</strong>
+                        <ul class="mb-0">
+                            <li>Schedule position change within 30 minutes</li>
+                            <li>Monitor pressure trends closely</li>
+                            <li>Document intervention in patient record</li>
+                        </ul>
+                    </div>
+                    <small class="text-muted d-block mt-2"><i class="bi bi-clock"></i> Detected: 1:30 PM | Duration: 1.5 hours</small>
+                </div>
+                <div class="text-end">
+                    <button class="btn btn-success btn-sm rounded-pill mb-1">Acknowledge</button>
+                    <button class="btn btn-dark btn-sm rounded-pill">Resolve</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔵 LOW RISK: David Martinez -->
+        <div class="alert-card bg-info-subtle border border-info rounded-4 p-4 mb-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="fw-bold text-primary mb-1">
+                        <i class="bi bi-info-circle"></i> David Martinez <span class="text-muted">ID: P004</span>
+                        <span class="badge bg-success ms-2">LOW RISK</span>
+                    </h6>
+                    <p class="mb-1"><strong>Alert Zone:</strong> Zone 2</p>
+                    <p class="mb-2"><strong>Pressure Reading:</strong> 58 mmHg</p>
+                    <div class="bg-white p-2 rounded-3 border small">
+                        <strong>Recommended Actions:</strong>
+                        <ul class="mb-0">
+                            <li>Continue standard monitoring</li>
+                            <li>Encourage posture variation</li>
+                            <li>Reassess weekly for changes</li>
+                        </ul>
+                    </div>
+                    <small class="text-muted d-block mt-2"><i class="bi bi-clock"></i> Detected: 12:00 PM | Duration: 3 hours</small>
+                </div>
+                <div class="text-end">
+                    <button class="btn btn-outline-success btn-sm rounded-pill mb-1">Acknowledge</button>
+                    <button class="btn btn-dark btn-sm rounded-pill">Resolve</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

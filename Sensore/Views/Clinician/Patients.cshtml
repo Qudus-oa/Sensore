@@ -31,72 +31,112 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- John Smith -->
                     <tr>
                         <td>
                             <strong>John Smith</strong><br />
                             <small class="text-muted">68y • Room 201A • P001</small>
                         </td>
-                        <td><span class="badge risk-high">HIGH</span></td>
+                        <td><span class="badge bg-danger">HIGH</span></td>
                         <td class="text-danger fw-semibold">95 mmHg</td>
                         <td>1.82</td>
                         <td class="text-danger">48/100</td>
-                        <td><span class="badge alert-high">1 Alert</span></td>
-                        <td><small class="text-muted">2 mins ago</small></td>
-                        <td><a href="#" class="link-success fw-semibold text-decoration-none">View Analytics →</a></td>
+                        <td><span class="badge bg-danger-subtle text-danger">1 Alert</span></td>
+                        <td><small class="text-muted">↑ 2 mins ago</small></td>
+                        <td>
+                            <a asp-controller="Clinician"
+                               asp-action="Analytics"
+                               asp-route-patientId="P001"
+                               asp-route-patientName="John Smith"
+                               class="text-success fw-semibold">View Analytics →</a>
+                        </td>
                     </tr>
+
+                    <!-- Michael Brown -->
                     <tr>
                         <td>
                             <strong>Michael Brown</strong><br />
                             <small class="text-muted">72y • Room 202B • P002</small>
                         </td>
-                        <td><span class="badge risk-medium">MEDIUM</span></td>
+                        <td><span class="badge bg-warning text-dark">MEDIUM</span></td>
                         <td class="text-warning fw-semibold">75 mmHg</td>
                         <td>1.58</td>
                         <td class="text-warning">62/100</td>
-                        <td><span class="badge alert-medium">1 Alert</span></td>
-                        <td><small class="text-muted">5 mins ago</small></td>
-                        <td><a href="#" class="link-success fw-semibold text-decoration-none">View Analytics →</a></td>
+                        <td><span class="badge bg-warning-subtle text-dark">1 Alert</span></td>
+                        <td><small class="text-muted">↑ 5 mins ago</small></td>
+                        <td>
+                            <a asp-controller="Clinician"
+                               asp-action="Analytics"
+                               asp-route-patientId="P002"
+                               asp-route-patientName="Michael Brown"
+                               class="text-success fw-semibold">View Analytics →</a>
+                        </td>
                     </tr>
+
+                    <!-- Emily Davis -->
                     <tr>
                         <td>
                             <strong>Emily Davis</strong><br />
                             <small class="text-muted">65y • Room 203A • P003</small>
                         </td>
-                        <td><span class="badge risk-high">HIGH</span></td>
+                        <td><span class="badge bg-danger">HIGH</span></td>
                         <td class="text-danger fw-semibold">88 mmHg</td>
                         <td>1.76</td>
                         <td class="text-danger">52/100</td>
-                        <td><span class="badge alert-high">1 Alert</span></td>
-                        <td><small class="text-muted">1 min ago</small></td>
-                        <td><a href="#" class="link-success fw-semibold text-decoration-none">View Analytics →</a></td>
+                        <td><span class="badge bg-danger-subtle text-danger">1 Alert</span></td>
+                        <td><small class="text-muted">↑ 1 min ago</small></td>
+                        <td>
+                            <a asp-controller="Clinician"
+                               asp-action="Analytics"
+                               asp-route-patientId="P003"
+                               asp-route-patientName="Emily Davis"
+                               class="text-success fw-semibold">View Analytics →</a>
+                        </td>
                     </tr>
+
+                    <!-- David Martinez -->
                     <tr>
                         <td>
                             <strong>David Martinez</strong><br />
                             <small class="text-muted">70y • Room 204C • P004</small>
                         </td>
-                        <td><span class="badge risk-low">LOW</span></td>
+                        <td><span class="badge bg-success">LOW</span></td>
                         <td class="text-success fw-semibold">58 mmHg</td>
                         <td>1.28</td>
                         <td class="text-success">78/100</td>
-                        <td><span class="badge alert-low">1 Alert</span></td>
-                        <td><small class="text-muted">8 mins ago</small></td>
-                        <td><a href="#" class="link-success fw-semibold text-decoration-none">View Analytics →</a></td>
+                        <td><span class="badge bg-primary-subtle text-primary">1 Alert</span></td>
+                        <td><small class="text-muted">↑ 8 mins ago</small></td>
+                        <td>
+                            <a asp-controller="Clinician"
+                               asp-action="Analytics"
+                               asp-route-patientId="P004"
+                               asp-route-patientName="David Martinez"
+                               class="text-success fw-semibold">View Analytics →</a>
+                        </td>
                     </tr>
+
+                    <!-- Sarah Wilson -->
                     <tr>
                         <td>
                             <strong>Sarah Wilson</strong><br />
                             <small class="text-muted">63y • Room 205A • P005</small>
                         </td>
-                        <td><span class="badge risk-medium">MEDIUM</span></td>
+                        <td><span class="badge bg-warning text-dark">MEDIUM</span></td>
                         <td class="text-warning fw-semibold">68 mmHg</td>
                         <td>1.42</td>
                         <td class="text-warning">68/100</td>
-                        <td><span class="badge alert-medium">1 Alert</span></td>
-                        <td><small class="text-muted">3 mins ago</small></td>
-                        <td><a href="#" class="link-success fw-semibold text-decoration-none">View Analytics →</a></td>
+                        <td><span class="badge bg-warning-subtle text-dark">1 Alert</span></td>
+                        <td><small class="text-muted">↑ 3 mins ago</small></td>
+                        <td>
+                            <a asp-controller="Clinician"
+                               asp-action="Analytics"
+                               asp-route-patientId="P005"
+                               asp-route-patientName="Sarah Wilson"
+                               class="text-success fw-semibold">View Analytics →</a>
+                        </td>
                     </tr>
                 </tbody>
+
             </table>
         </div>
     </div>
