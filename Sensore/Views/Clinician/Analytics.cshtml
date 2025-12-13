@@ -184,7 +184,7 @@
         <p class="text-muted small mb-4">Clinical decision support based on analyzed metrics</p>
 
         <div class="row g-4">
-            <!-- 🔴 High Priority -->
+            <!--  High Priority -->
             <div class="col-md-6 col-lg-3">
                 <div class="p-3 rounded-4 bg-danger-subtle border border-danger">
                     <h6 class="fw-bold text-danger mb-2">
@@ -199,7 +199,7 @@
                 </div>
             </div>
 
-            <!-- 🟡 Moderate Priority -->
+            <!--  Moderate Priority -->
             <div class="col-md-6 col-lg-3">
                 <div class="p-3 rounded-4 bg-warning-subtle border border-warning">
                     <h6 class="fw-bold text-warning mb-2">
@@ -214,7 +214,7 @@
                 </div>
             </div>
 
-            <!-- 🔵 Posture Optimization -->
+            <!--  Posture Optimization -->
             <div class="col-md-6 col-lg-3">
                 <div class="p-3 rounded-4 bg-info-subtle border border-info">
                     <h6 class="fw-bold text-primary mb-2">
@@ -229,7 +229,7 @@
                 </div>
             </div>
 
-            <!-- 🟢 Monitoring Plan -->
+            <!--  Monitoring Plan -->
             <div class="col-md-6 col-lg-3">
                 <div class="p-3 rounded-4 bg-success-subtle border border-success">
                     <h6 class="fw-bold text-success mb-2">
@@ -265,7 +265,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // ✅ Data definitions
+            //  Data definitions
             const patientData = {
                 P001: { name: "John Smith", room: "201A", age: 68, risk: "HIGH RISK", pressure: 95, contact: 30.5, ppi: 1.82, posture: 38 },
                 P002: { name: "Michael Brown", room: "202B", age: 72, risk: "MEDIUM RISK", pressure: 75, contact: 33.2, ppi: 1.58, posture: 45 },
@@ -520,7 +520,7 @@
 
 
 
-            // ✅ Update metrics dynamically
+            //  Update metrics dynamically
             function updateAnalytics(patientId, timeRange) {
                 const p = patientData[patientId];
                 document.getElementById("patientInfo").textContent = `Patient: ${p.name}`;
@@ -536,7 +536,7 @@
                 pressureChart.update();
             }
 
-            // ✅ Listeners
+            //  Listeners
             document.getElementById("patientSelect").addEventListener("change", e => {
                 updateAnalytics(e.target.value, document.querySelector("#timeRangeGroup .active").dataset.range);
             });
@@ -550,7 +550,7 @@
                 });
             });
 
-            // ✅ Generate Report
+            //  Generate Report
             document.getElementById("generateReportBtn").addEventListener("click", () => {
                 const sidebar = document.querySelector(".sidebar");
                 if (sidebar) sidebar.style.display = "none";
@@ -558,7 +558,7 @@
                 if (sidebar) sidebar.style.display = "flex";
             });
 
-            // ✅ Default load
+            //  Default load
             updateAnalytics("P001", "24h");
         });
     </script>
