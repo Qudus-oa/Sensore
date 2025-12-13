@@ -6,13 +6,13 @@ namespace Sensore.Models
     {
         public int Id { get; set; }
 
-        // ISO-8601 timestamp of the frame (use the frame's Timestamp)
+        // ISO-8601 timestamp of the frame 
         public DateTime FrameTimestamp { get; set; }
 
-        // Optional: which frame index was on-screen when commenting
+        
         public int? FrameIndex { get; set; }
 
-        // Who wrote it (you can extend with Identity later)
+        
         public string Author { get; set; } = "Patient";
 
         public string Text { get; set; } = string.Empty;

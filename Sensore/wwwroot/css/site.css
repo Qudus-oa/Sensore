@@ -20,7 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
-/* ==== System Alerts Styles ==== */
+/*  System Alerts Styles  */
 .alert-summary {
     border-radius: 12px;
     color: #fff;
@@ -57,7 +57,7 @@ body {
     border: 1px solid #f3f4f6;
     margin-top: .5rem;
 }
-/* === CLINICIAN SIDEBAR === */
+/*  CLINICIAN SIDEBAR  */
 .sidebar {
     width: 260px;
     background: linear-gradient(180deg, #064e3b, #0b3d2f);
@@ -114,7 +114,7 @@ body {
 .logout-section {
     margin-top: 2rem;
 }
-/* === SYSTEM ALERTS STYLING === */
+/*  SYSTEM ALERTS STYLING  */
 
 .system-alerts {
     background: #f9fafb;
@@ -173,7 +173,7 @@ body {
 .form-control, .form-select {
     border-radius: 10px;
 }
-/* === PATIENTS PAGE STYLING === */
+/*  PATIENTS PAGE STYLING  */
 
 .patients {
     background: #f9fafb;
