@@ -1,0 +1,100 @@
+﻿@{
+    Layout = null;
+}
+
+@model Sensore.Models.User
+@using Sensore.Models
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #cfe9f7, #eaf6ff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .sensore {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0d6efd;
+            text-align: center;
+            margin-bottom: .5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: .6rem;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card p-4">
+        <div class="sensore">sensore</div>
+        <p class="text-center text-muted mb-4">welcome to sensore</p>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <form asp-action="Index" method="post" class="needs-validation" novalidate>
+
+            //
+            <div class="mb-3">
+                <label class="form-label">User Type</label>
+                <select asp-for="Type" class="form-select">
+                    <option value="">Select User</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Clinician">Clinician</option>
+                    <option value="Patient">Patient</option>
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input asp-for="Email" type="email" class="form-control" placeholder="name@example.com"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="••••••••"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Login
+            </button>
+
+        </form>
+    </div>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+</body>
+</html>
