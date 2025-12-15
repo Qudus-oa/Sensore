@@ -1,7 +1,17 @@
+
+
+using Microsoft.EntityFrameworkCore;
+using Sensore.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession(); // enables session management
 
 var app = builder.Build();
 
@@ -17,11 +27,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession(); //  activate sessions for all requests
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Loginpage}/{action=Index}/{id?}");
+   pattern: "{controller=Loginpage}/{action=PatientClinicianLogin}/{id?}");
+
 
 app.Run();
