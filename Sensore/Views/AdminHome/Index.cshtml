@@ -3,5 +3,88 @@
 *@
 @{
 }
-@model User
-<h1>Admin home page</h1>
+@{
+    Layout = "_DashboardLayout";
+}
+
+@using Sensore.Models
+@{
+    ViewData["Title"] = "Admin Home";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #eef2ff, #f8f9ff);
+    }
+
+    .dashboard-card {
+        border: none;
+        border-radius: 1rem;
+        background:lightblue;
+        box-shadow: 0 12px 25px rgba(0,0,0,.08);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px rgba(0,0,0,.15);
+        }
+</style>
+<div class="d-flex justify-content-end container mt-4">
+    <a asp-controller="Account"
+       asp-action="Logout"
+       class="btn btn-outline-danger">
+        Logout
+    </a>
+</div>
+
+
+<div class="container py-5">
+    <h2 class="mb-4 fw-bold">Admin Dashboard</h2>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">User Management</h5>
+                    <p class="text-muted">Manage clinicians and patients.</p>
+                    <a asp-controller="ManageUsers"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Manage Users
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">System Data</h5>
+                    <p class="text-muted">Upload and maintain sensor datasets.</p>
+                    <a asp-controller="CsvUpload"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Upload Data
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Reports</h5>
+                    <p class="text-muted">System performance and insights.</p>
+                    <a asp-controller="UserReports"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        View Reports
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
