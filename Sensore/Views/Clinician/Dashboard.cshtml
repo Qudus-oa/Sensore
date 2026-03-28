@@ -1,0 +1,48 @@
+﻿@model Sensore.Models.DashboardViewModel
+@{
+    ViewBag.Title = "Clinical Dashboard";
+    Layout = "~/Views/Shared/_ClinicianLayout.cshtml";
+}
+
+<div class="dashboard">
+    <h2>Clinical Dashboard</h2>
+    <p class="text-muted">Overview of patient pressure monitoring</p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4"><div class="card bg-danger text-white p-3"><h4>@Model.CriticalAlertCount</h4><p>Critical Alerts</p></div></div>
+        <div class="col-md-4"><div class="card bg-warning text-dark p-3"><h4>@Model.HighRiskPatientsCount</h4><p>High Risk Patients</p></div></div>
+        <div class="col-md-4"><div class="card bg-primary text-white p-3"><h4>@Model.NewAlertsCount</h4><p>New Alerts</p></div></div>
+    </div>
+
+    <h4>Recent Critical Alerts</h4>
+    @foreach (var alert in Model.RecentCriticalAlerts)
+    {
+        <div class="alert alert-danger d-flex justify-content-between">
+            <div>
+                <strong>@alert.PatientName</strong> – @alert.Zone – <b>@alert.HighestPressure mmHg</b><br />
+                Detected: @alert.DetectedAt.ToString("t"), Duration: @alert.Duration.Minutes mins
+            </div>
+            <form asp-action="Acknowledge" method="post">
+                <input type="hidden" name="id" value="@alert.Id" />
+                <button class="btn btn-success btn-sm">Acknowledge</button>
+            </form>
+        </div>
+    }
+
+    <h4>High Risk Patients</h4>
+    <table class="table table-striped">
+        <thead><tr><th>Patient</th><th>Room</th><th>Risk Level</th><th>Pressure</th><th>Alerts</th></tr></thead>
+        <tbody>
+            @foreach (var p in Model.HighRiskPatients)
+            {
+                <tr>
+                    <td>@p.Patient</td>
+                    <td>@p.Room</td>
+                    <td>@p.RiskLevel</td>
+                    <td>@p.HighestPressure mmHg</td>
+                    <td>@p.ActiveAlerts</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

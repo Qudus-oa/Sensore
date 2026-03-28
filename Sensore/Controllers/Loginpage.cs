@@ -21,8 +21,12 @@ namespace Sensore.Controllers
             }
             else if (userType == "Clinician" && userId == "clinician" && password == "1234")
             {
-                return RedirectToAction("Index", "ClinicianHome");
+                // Store clinician info in session
+                HttpContext.Session.SetString("ClinicianName", "Dr. Sarah Johnson");
+
+                return RedirectToAction("Dashboard", "Clinician");
             }
+
 
             ViewBag.ErrorMessage = "Invalid credentials. Please try again.";
             return View();
